@@ -1,4 +1,5 @@
-#volatility trading - this script not serve as financial advice, proceed at your OWN risk
+# -*- coding: utf-8 -*-
+
 
 import yfinance as yf
 import pandas as pd
@@ -252,8 +253,32 @@ def gradient_boosted_forest(x,y):
 def runIt(days_back,trading_interval,pchange,eye_back):
   df = flow2blo('MSFT',days_back,trading_interval, pchange, eye_back)
   df = df.append(flow2blo('AAPL',days_back,trading_interval, pchange, eye_back))
-  df = df.append(flow2blo('ATNM',days_back,trading_interval, pchange, eye_back))
-  df = df.append(flow2blo('SOL',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('ADBE',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('META',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('AMZN',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('GOOG',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('NVDA',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('PYPL',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('TSLA',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('INTC',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('COST',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('TMUS',days_back,trading_interval, pchange, eye_back))
+
+  df = df.append(flow2blo('TSM',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('ASML',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('ORCL',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('TXN',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('CRM',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('CSCO',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('AVGO',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('IBM',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('NOW',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('AMAT',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('ADI',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('UBER',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('EQIX',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('FIS',days_back,trading_interval, pchange, eye_back))
+  df = df.append(flow2blo('SNPS',days_back,trading_interval, pchange, eye_back))
 
   df = df.append(flow2blo('BTX',days_back,trading_interval, pchange, eye_back))
   df = df.append(flow2blo('ALPP',days_back,trading_interval, pchange, eye_back))
@@ -306,10 +331,10 @@ def runIt(days_back,trading_interval,pchange,eye_back):
   return xc, xv, xg, clf, xgb_clf, gb_clf
 
 #step 1
-forest, xgb , gb, clf, xgb_clf, gb_clf = runIt('7d','1m',.5,60)
+forest, xgb , gb, clf, xgb_clf, gb_clf = runIt('25d','5m',.5,60)
 #THIS IS THE TD AMERITRADE PART, plug in your own #s after making an account + developers account
-ACCT_NUMBER = 
-API_KEY = ''
+ACCT_NUMBER = 253990427
+API_KEY = '5LMQZ3CN9NZYGAVHUTWP0HBNWAZIVGFX'
 CALLBACK_URL = 'http://localhost'
 
 from selenium import webdriver
@@ -352,8 +377,8 @@ def place_limit_order(c,order_type,shares,STOCK, price):
     if order_type == 'sell':
         order_spec = equity_sell_limit(STOCK,1,price).set_session(Session.NORMAL).set_duration(Duration.DAY).build()
         c.place_order(ACCT_NUMBER,order_spec)
-    
-def Credit_Sticks1(c, STOCK, ask_hold):
+import random
+def Credit_Swish1(c, STOCK, ask_hold):
     r = c.get_quote(STOCK)
     assert r.status_code == 200, r.raise_for_status()
     y = r.json()
@@ -366,14 +391,24 @@ def Credit_Sticks1(c, STOCK, ask_hold):
     ask_quantity = int(y[STOCK]['askSize'])
     price = (bid_price+((ask_price-bid_price)*bid_quantity/(ask_quantity+bid_quantity))+ask_price+((ask_price-bid_price)*ask_quantity/(ask_quantity+bid_quantity)))/2
     if price ==0:
-        price = ask_price
+        stock = STOCK
+        stock = stock+'+stock+current+price'
+        url = 'https://www.google.com/search?q='+stock
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36'}
+        html = requests.get(url,headers = headers).text
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        A = []
+        for tag in soup.findAll('div',{'class':'PZPZlf'}):
+            A.append(tag.findNext('span').text)
+        price = float(A[3].replace(' USD',''))
     if bid_price ==0:
-        bid_price = ask_price
+        bid_price = price
+        ask_price = price + random.uniform(0,4)
     pchange = (ask_price-ask_hold)/ask_hold*100
     volume = bid_quantity+ask_quantity
     return bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold
 
-def Credit_Sticks(c, STOCK):
+def Credit_Swish(c, STOCK):
     r = c.get_quote(STOCK)
     assert r.status_code == 200, r.raise_for_status()
     y = r.json()
@@ -383,6 +418,20 @@ def Credit_Sticks(c, STOCK):
     ask_price = float(y[STOCK]['askPrice'])
     ask_quantity = int(y[STOCK]['askSize'])
     price = (bid_price+((ask_price-bid_price)*bid_quantity/(ask_quantity+bid_quantity))+ask_price+((ask_price-bid_price)*ask_quantity/(ask_quantity+bid_quantity)))/2
+    if price ==0:
+        stock = STOCK
+        stock = stock+'+stock+current+price'
+        url = 'https://www.google.com/search?q='+stock
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36'}
+        html = requests.get(url,headers = headers).text
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        A = []
+        for tag in soup.findAll('div',{'class':'PZPZlf'}):
+            A.append(tag.findNext('span').text)
+        price = float(A[3].replace(' USD',''))
+    if bid_price ==0:
+        bid_price = price
+        ask_price = price + random.uniform(0,4)
 
     pchange = (ask_price-ask1)/ask1*100
     volume = bid_quantity+ask_quantity
@@ -395,7 +444,7 @@ def stock_setup(STOCK):
   import time
   for x in range(60):
         time.sleep(1)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume= Credit_Sticks(c, STOCK)
+        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume= Credit_Swish(c, STOCK)
         CS['bid_price'].append(bid_price)
         CS['bid_quantity'].append(bid_quantity)
         CS['ask_price'].append(ask_price)
@@ -471,11 +520,16 @@ def flow2go_predictor(STOCK,target_band,interval_back, CS):
   yahooPR1 = []
   yahooMV1 = []
   yahoo = yf.Ticker(STOCK)
-  
-  data['Close'] = CS['ask_price']
-  data['Open'] = CS['ask_price']
-  data['pchange'] = CS['pchange']*100
+  data = pd.DataFrame()
+  data['Close'] = pd.DataFrame(CS['ask_price'])+pd.DataFrame(CS['pchange'])
+  data['Open'] = pd.DataFrame(CS['ask_price'])-pd.DataFrame(CS['pchange'])
+
+  data['Low'] = CS['bid_price']
+  data['High'] = CS['ask_price']
+
+  data['pchange'] = CS['pchange']
   data['Volume'] = CS['volume']
+  data = data.reset_index()
 
   for x in data['index']:
     five_int.append(np.average(data['Close'].iloc[x-5:x]))
@@ -614,184 +668,62 @@ def flow2go_predictor(STOCK,target_band,interval_back, CS):
   return final_t
   
   
-def credit_sticks(num_minutes, STOCK1,STOCK2,STOCK3,STOCK4,STOCK5,STOCK6,STOCK7,STOCK8,STOCK9,STOCK10):
+def credit_swish(num_minutes, STOCK1,STOCK2):
     CS1 = stock_setup(STOCK1)
     CS2 = stock_setup(STOCK2)
-    CS3 = stock_setup(STOCK3)
-    CS4 = stock_setup(STOCK4)
-    CS5 = stock_setup(STOCK5)
-    CS6 = stock_setup(STOCK6)
-    CS7 = stock_setup(STOCK7)
-    CS8 = stock_setup(STOCK8)
-    CS9 = stock_setup(STOCK9)
-    CS10 = stock_setup(STOCK10)
 
 
     for xx in range(num_minutes):
         #selling back
         final_t1 = flow2go_predictor(STOCK1,.5, 60, CS1).fillna(0)
         final_t2 = flow2go_predictor(STOCK2,.5, 60, CS2).fillna(0)
-        final_t3 = flow2go_predictor(STOCK3,.5, 60, CS3).fillna(0)
-        final_t4 = flow2go_predictor(STOCK4,.5, 60, CS4).fillna(0)
-        final_t5 = flow2go_predictor(STOCK5,.5, 60, CS5).fillna(0)
-        final_t6 = flow2go_predictor(STOCK6,.5, 60, CS6).fillna(0)
-        final_t7 = flow2go_predictor(STOCK7,.5, 60, CS7).fillna(0)
-        final_t8 = flow2go_predictor(STOCK8,.5, 60, CS8).fillna(0)
-        final_t9 = flow2go_predictor(STOCK9,.5, 60, CS9).fillna(0)
-        final_t10 = flow2go_predictor(STOCK10,.5, 60, CS10).fillna(0)
-        #1: buy, 0: sell, 2: hold
-        #buying
+        try:
+            x1 = float(clf.predict_proba(final_t1)[-1][1])
+            x11 = float(xgb_clf.predict_proba(final_t1)[-1][1])
+            print(x1)
+            x2 = float(clf.predict_proba(final_t2)[-1][1])
+            x22 = float(xgb_clf.predict_proba(final_t2)[-1][1])
+            print(x2)
+        except:
+            x1 = float(clf.predict_proba(final_t1)[-1][1])
+            print(x1)
+            x2 = float(clf.predict_proba(final_t2)[-1][1])
+            print(x2)
         
-        x1 = int(clf.predict_proba(final_t1[-1])[:, 1])
-        x11 = int(xgb_clf.predict_proba(final_t1[-1])[:, 1])
-        x111 = int(gb_clf.predict_proba(final_t1[-1])[:, 1])
-        print(x1)
-        x2 = int(clf.predict_proba(final_t2[-1])[:, 1])
-        x22 = int(xgb_clf.predict_proba(final_t2[-1])[:, 1])
-        x222 = int(gb_clf.predict_proba(final_t2[-1])[:, 1])
-        print(x2)
-        x3 = int(clf.predict_proba(final_t3[-1])[:, 1])
-        x33 = int(xgb_clf.predict_proba(final_t3[-1])[:, 1])
-        x333 = int(gb_clf.predict_proba(final_t3[-1])[:, 1])
-        print(x3)
-        x4 = int(clf.predict_proba(final_t4[-1])[:, 1])
-        x44 = int(xgb_clf.predict_proba(final_t4[-1])[:, 1])
-        x444 = int(gb_clf.predict_proba(final_t4[-1])[:, 1])
         
-        x5 = int(clf.predict_proba(final_t5[-1])[:, 1])
-        x55 = int(xgb_clf.predict_proba(final_t5[-1])[:, 1])
-        x555 = int(gb_clf.predict_proba(final_t5[-1])[:, 1])
-        
-        x6 = int(clf.predict_proba(final_t6[-1])[:, 1])
-        x66 = int(xgb_clf.predict_proba(final_t6[-1])[:, 1])
-        x666 = int(gb_clf.predict_proba(final_t6[-1])[:, 1])
-        
-        x7 = int(clf.predict_proba(final_t7[-1])[:, 1])
-        x77 = int(xgb_clf.predict_proba(final_t7[-1])[:, 1])
-        x777 = int(gb_clf.predict_proba(final_t7[-1])[:, 1])
-        
-        x8 = int(clf.predict_proba(final_t8[-1])[:, 1])
-        x88 = int(xgb_clf.predict_proba(final_t8[-1])[:, 1])
-        x888 = int(gb_clf.predict_proba(final_t8[-1])[:, 1])
-        
-        x9 = int(clf.predict_proba(final_t9[-1])[:, 1])
-        x99 = int(xgb_clf.predict_proba(final_t9[-1])[:, 1])
-        x999 = int(gb_clf.predict_proba(final_t9[-1])[:, 1])
-        
-        x10 = int(clf.predict_proba(final_t10[-1])[:, 1])
-        x100 = int(xgb_clf.predict_proba(final_t10[-1])[:, 1])
-        x1000 = int(gb_clf.predict_proba(final_t10[-1])[:, 1])
-        
-        jj10 = np.average(x10,x100,x1000)  
-        jj1 = np.average(x1,x11,x111)       
-        jj2 = np.average(x2,x22,x222)       
-        jj3 = np.average(x3,x33,x333)       
-        jj4 = np.average(x4,x44,x444)       
-        jj5 = np.average(x5,x55,x555)       
-        jj6 = np.average(x6,x66,x666)       
-        jj7 = np.average(x7,x77,x777)       
-        jj8 = np.average(x8,x88,x888)       
-        jj9 = np.average(x9,x99,x999)  
-        print(max(jj1,jj2,jj3,jj4,jj5,jj6,jj7,jj8,jj9,jj10))
+        jj1 = (x1+x11)/2       
+        jj2 = (x2+x22)/2       
+        print(max(jj1,jj2))
         
         t = 0
-        if jj10 >=.55:
-            place_order(c,'buy',round(10),STOCK10)
+        if jj1 >=.75:
+            place_order(c,'buy',1,STOCK1)
             t = t+1
-            time.sleep(1)
-            
-        if jj1 >=.55:
-            place_order(c,'buy',round(20),STOCK1)
-            t = t+1
-            time.sleep(1)
+            time.sleep(5)
 
-        if jj2 >=.55:
-            place_order(c,'buy',round(20),STOCK2)
+        if jj2 >=.75:
+            place_order(c,'buy',1,STOCK2)
             t = t+1
-            time.sleep(1)
+            time.sleep(5)
 
-        if jj3 >=.55:
-            place_order(c,'buy',round(20),STOCK3)
-            t = t+1
-            time.sleep(1)
-
-        if jj4 >=.55:
-            place_order(c,'buy',round(20),STOCK4)
-            t = t+1
-            time.sleep(1)
-
-        if jj5 >=.55:
-            place_order(c,'buy',round(20),STOCK5)
-            t = t+1
-            time.sleep(1)
-        if jj6 >=.55:
-            place_order(c,'buy',round(20),STOCK6)
-            t = t+1
-            time.sleep(1)
-        if jj7 >=.55:
-            place_order(c,'buy',round(20),STOCK7)
-            t = t+1
-            time.sleep(1)
-        if jj8 >=.55:
-            place_order(c,'buy',20,STOCK8)
-            t = t+1
-            time.sleep(1)
-        if jj9>=.55:
-            place_order(c,'buy',10,STOCK9)
-            t = t+1
-            time.sleep(1)
         print('# of stocks bought = '+str(t))
             
-        time.sleep(40-t)
+        time.sleep(300-t)
 
-        if jj10 >=.55:
-            place_order(c,'sell',round(10),STOCK10)
-            t = t+1
-            time.sleep(1)
             
-        if jj1 >=.55:
-            place_order(c,'sell',round(20),STOCK1)
+        if jj1 >=.75:
+            place_order(c,'sell',1,STOCK1)
             t = t+1
-            time.sleep(1)
+            time.sleep(5)
 
-        if jj2 >=.55:
-            # place_order(c,'sell',round(20),STOCK2)
+        if jj2 >=.75:
+            place_order(c,'sell',1,STOCK2)
             t = t+1
-            time.sleep(1)
+            time.sleep(5)
 
-        if jj3 >=.55:
-            place_order(c,'sell',round(20),STOCK3)
-            t = t+1
-            time.sleep(1)
-
-        if jj4 >=.55:
-            place_order(c,'sell',round(20),STOCK4)
-            t = t+1
-            time.sleep(1)
-
-        if jj5 >=.55:
-            place_order(c,'sell',round(20),STOCK5)
-            t = t+1
-            time.sleep(1)
-        if jj6 >=.55:
-            place_order(c,'sell',round(20),STOCK6)
-            t = t+1
-            time.sleep(1)
-        if jj7 >=.55:
-            place_order(c,'sell',round(20),STOCK7)
-            t = t+1
-            time.sleep(1)
-        if jj8 >=.55:
-            place_order(c,'sell',20,STOCK8)
-            t = t+1
-            time.sleep(1)
-        if jj9>=.55:
-            place_order(c,'sell',10,STOCK9)
-            t = t+1
-            time.sleep(1)
         if xx ==0:
             ask_hold = 0
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK1, ask_hold)
+        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Swish1(c, STOCK1, ask_hold)
         CS1['bid_price'].append(bid_price)
         CS1['bid_quantity'].append(bid_quantity)
         CS1['ask_price'].append(ask_price)
@@ -800,7 +732,7 @@ def credit_sticks(num_minutes, STOCK1,STOCK2,STOCK3,STOCK4,STOCK5,STOCK6,STOCK7,
         CS1['pchange'].append(pchange)
         CS1['volume'].append(volume)
 
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK2, ask_hold)
+        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Swish1(c, STOCK2, ask_hold)
         CS2['bid_price'].append(bid_price)
         CS2['bid_quantity'].append(bid_quantity)
         CS2['ask_price'].append(ask_price)
@@ -808,81 +740,11 @@ def credit_sticks(num_minutes, STOCK1,STOCK2,STOCK3,STOCK4,STOCK5,STOCK6,STOCK7,
         CS2['price'].append(price)
         CS2['pchange'].append(pchange)
         CS2['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume , ask_hold= Credit_Sticks1(c, STOCK3, ask_hold)
-        CS3['bid_price'].append(bid_price)
-        CS3['bid_quantity'].append(bid_quantity)
-        CS3['ask_price'].append(ask_price)
-        CS3['ask_quantity'].append(ask_quantity)
-        CS3['price'].append(price)
-        CS3['pchange'].append(pchange)
-        CS3['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK4, ask_hold)
-        CS4['bid_price'].append(bid_price)
-        CS4['bid_quantity'].append(bid_quantity)
-        CS4['ask_price'].append(ask_price)
-        CS4['ask_quantity'].append(ask_quantity)
-        CS4['price'].append(price)
-        CS4['pchange'].append(pchange)
-        CS4['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK5, ask_hold)
-        CS5['bid_price'].append(bid_price)
-        CS5['bid_quantity'].append(bid_quantity)
-        CS5['ask_price'].append(ask_price)
-        CS5['ask_quantity'].append(ask_quantity)
-        CS5['price'].append(price)
-        CS5['pchange'].append(pchange)
-        CS5['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK6, ask_hold)
-        CS6['bid_price'].append(bid_price)
-        CS6['bid_quantity'].append(bid_quantity)
-        CS6['ask_price'].append(ask_price)
-        CS6['ask_quantity'].append(ask_quantity)
-        CS6['price'].append(price)
-        CS6['pchange'].append(pchange)
-        CS6['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume , ask_hold= Credit_Sticks1(c, STOCK7, ask_hold)
-        CS7['bid_price'].append(bid_price)
-        CS7['bid_quantity'].append(bid_quantity)
-        CS7['ask_price'].append(ask_price)
-        CS7['ask_quantity'].append(ask_quantity)
-        CS7['price'].append(price)
-        CS7['pchange'].append(pchange)
-        CS7['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK8, ask_hold)
-        CS8['bid_price'].append(bid_price)
-        CS8['bid_quantity'].append(bid_quantity)
-        CS8['ask_price'].append(ask_price)
-        CS8['ask_quantity'].append(ask_quantity)
-        CS8['price'].append(price)
-        CS8['pchange'].append(pchange)
-        CS8['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK9, ask_hold)
-        CS9['bid_price'].append(bid_price)
-        CS9['bid_quantity'].append(bid_quantity)
-        CS9['ask_price'].append(ask_price)
-        CS9['ask_quantity'].append(ask_quantity)
-        CS9['price'].append(price)
-        CS9['pchange'].append(pchange)
-        CS9['volume'].append(volume)
-        bid_price, bid_quantity, ask_price, ask_quantity, price, pchange, volume, ask_hold = Credit_Sticks1(c, STOCK10, ask_hold)
-        CS10['bid_price'].append(bid_price)
-        CS10['bid_quantity'].append(bid_quantity)
-        CS10['ask_price'].append(ask_price)
-        CS10['ask_quantity'].append(ask_quantity)
-        CS10['price'].append(price)
-        CS10['pchange'].append(pchange)
-        CS10['volume'].append(volume)
+        
 
 
 
-#minutes in a trading day: 6.5*60 = 690 --> RUN 45 minutes pre market!!
 
-#stocks <$1: CDTX: therapeutics, UBX: biotech, CRTX (pharma), INFI (pharma), 
-#AGTC (genetic tech), FBIO (biotech), SYRS (pharma), SYBX (SYBX)
-#, SIEN (medical sales), CABA (biotech), GSV (mining), CUBXF (cubic farming systems), 
-#POFCY (energy), CYBN (psychedelic tehrapetuics), APTX (biopharma), SLHG, UPH (digital health)
-# CELTF (mining)
-
-credit_sticks(200,'BTX','APVO','ALPP','GBOX','VVPR','FTEK','BTBT','OCGN', 'ICD','FCEL')
+credit_swish(300,'APVO','ALPP')
 
 #OMGA, TEDU, NOK, + SAI --> 
