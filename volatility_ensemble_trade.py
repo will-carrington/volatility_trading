@@ -316,8 +316,8 @@ def runIt(days_back,trading_interval,pchange,eye_back):
 
 
 forest, xgb , gb, clf, xgb_clf, gb_clf = runIt('60d','15m',.01,15)
-ACCT_NUMBER = 253990427
-API_KEY = '5LMQZ3CN9NZYGAVHUTWP0HBNWAZIVGFX'
+ACCT_NUMBER =
+API_KEY = ''
 CALLBACK_URL = 'http://localhost'
 
 from selenium import webdriver
