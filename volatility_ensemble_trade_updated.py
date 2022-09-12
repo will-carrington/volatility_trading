@@ -219,7 +219,7 @@ def f2g(stock,time_back, interval_per, target_band, interval_back):
   
   target = []
   for x in data['pchange']:
-    if x >= .5:
+    if x >= target_band:
       target.append(1)
     else:
       target.append(0)
