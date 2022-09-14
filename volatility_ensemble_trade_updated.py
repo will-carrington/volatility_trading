@@ -693,8 +693,10 @@ def printer(STOCK1,CS1,xx, bought):
     else:
         bought = 0
     if bought1 != bought:
-        if bought[-3:] == STOCK1[-3:]:
-            place_order(c, 'sell', 1, STOCK1)
+      if bought == 0:
+          place_order(c, 'sell', 1, STOCK1)
+        else:
+          dfd = 0
 
     return bought
                 
